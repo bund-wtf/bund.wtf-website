@@ -1,0 +1,59 @@
+name: Build and publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.0.0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - name: Install modules for build
+        run: npm install
+      - name: Setup contact information
+        env:
+          WEBSITE_CONTACT: ${{ secrets.WEBSITE_CONTACT }}
+        run: echo "$WEBSITE_CONTACT" > contact.json
+      - name: Build website
+        run: npm run build
+      - name: ZIP website to file
+        run: zip -r ./website.zip ./package.json ./next.config.js ./.next ./public
+      - name: Stop and cleanup service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo /bin/systemctl stop bund_wtf_website
+            rm -rf ~/apps/website
+          script_stop: true
+      - name: Upload ZIP file
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "website.zip"
+          target: "~/apps/website"
+      - name: Unzip and setup new service
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd ~/apps/website && unzip ./website.zip
+            rm ~/apps/website/website.zip
+            cd ~/apps/website && npm install
+            sudo /bin/systemctl start bund_wtf_website
+          script_stop: true
