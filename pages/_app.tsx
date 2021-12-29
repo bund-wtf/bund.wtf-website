@@ -26,7 +26,13 @@ import '../styles/globals.scss';
 import type { AppProps } from 'next/app';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import ResponseAppBar from '../components/ResponsiveAppBar';
+import createCache from '@emotion/cache';
+import { AppBar, Box, Button, CssBaseline, Toolbar, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import Link from 'next/link';
+
+import heroImage from '../assets/images/computer-monkey.png';
+
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -34,11 +40,6 @@ const clientSideEmotionCache = createEmotionCache();
 interface BundWtfAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
-
-import createCache from '@emotion/cache';
-import { red } from '@mui/material/colors';
-import { AppBar, Box, Button, CssBaseline, Toolbar, Typography } from '@mui/material';
-import Link from 'next/link';
 
 // prepend: true moves MUI styles to the top of the <head> so they're loaded first.
 // It allows developers to easily override MUI styles with other styling solutions, like CSS modules.
@@ -53,7 +54,40 @@ const theme = createTheme({
   },
 });
 
+const useStyles = makeStyles((theme) => {
+  return {
+    appBar: {
+      backgroundColor: '#000',
+      color: '#fff'
+    },
+    hero: {
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${heroImage.src}')`,
+      height: "384px",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      position: "relative",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "#fff"
+    },
+    heroTitleWrapper: {
+      textAlign: "center"
+    },
+    heroTitle: {
+      fontSize: "4rem"
+    },
+    heroSubtitle: {
+      fontSize: "2rem",
+      width: "100%"
+    }
+  };
+});
+
 const BundWtfApp = (props: BundWtfAppProps) => {
+  const classes = useStyles();
+
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   const handleGithubClick = () => {
@@ -65,7 +99,7 @@ const BundWtfApp = (props: BundWtfAppProps) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
 
-        <AppBar position="fixed">
+        <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <Typography
               variant="h6"
@@ -73,25 +107,23 @@ const BundWtfApp = (props: BundWtfAppProps) => {
               component="div"
               sx={{ mr: 2, display: { xs: 'flex' } }}
             >
-              bund.wtf
-            </Typography>
-
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
               <Link href="/">
                 <Button
                   key="home-page"
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
-                  Startseite
+                  WTF Bund!
                 </Button>
               </Link>
+            </Typography>
 
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
               <Link href="/datenschutz">
                 <Button
                   key="privacy-page"
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
-                  Datenschutzerklärung
+                  Datenschutz
                 </Button>
               </Link>
 
@@ -109,6 +141,12 @@ const BundWtfApp = (props: BundWtfAppProps) => {
           </Toolbar>
         </AppBar>
         <Toolbar />
+        <Box className={classes.hero}>
+          <Box className={classes.heroTitleWrapper}>
+            <Box className={classes.heroTitle}>WTF Bund!</Box>
+            <Box className={classes.heroSubtitle}>Digitalisierung in Deutschland</Box>
+          </Box>
+        </Box>
         <Component {...pageProps} />
       </ThemeProvider>
     </CacheProvider>

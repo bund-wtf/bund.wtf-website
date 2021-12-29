@@ -22,18 +22,29 @@
   SOFTWARE.
 *******************************************************************************/
 
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import Document, { Html, Head, Main, NextScript } from 'next/document'
 
-interface IResponseData {
-  name: string;
+class BundWtfDocument extends Document {
+  static async getInitialProps(ctx: any) {
+    const initialProps = await Document.getInitialProps(ctx);
+    return {
+      ...initialProps
+    };
+  };
+
+  render() {
+    return (
+      <Html>
+        <Head>
+          <title>WTF Bund! - Digitalisierung in Deutschland</title>
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
+  };
 }
 
-const helloHandler: NextApiHandler = (
-  request: NextApiRequest,
-  response: NextApiResponse<IResponseData>
-) => {
-  response.status(200)
-    .json({ name: 'Tanja M.' });
-};
-
-export default helloHandler;
+export default BundWtfDocument;

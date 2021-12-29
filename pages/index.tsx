@@ -23,23 +23,118 @@
 *******************************************************************************/
 
 // import styles from '../styles/Home.module.scss';
-import { Container } from '@mui/material';
+import { Avatar, Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Container, Grid, IconButton, Link, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import type { NextPage } from 'next';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import useSWR from 'swr';
+import type { INewsEntry } from '../types';
+
+const NEWS_API_URL = '/api/news';
+
+const useStyles = makeStyles((theme: any) => {
+  return {
+    blogsContainer: {
+      paddingTop: theme.spacing(3)
+    },
+    blogTitle: {
+      fontWeight: 800,
+      paddingBottom: theme.spacing(3)
+    },
+    card: {
+      maxWidth: "100%"
+    },
+    media: {
+      height: 240
+    },
+    cardActions: {
+      display: "flex",
+      margin: "0 10px",
+      justifyContent: "space-between"
+    },
+    author: {
+      display: "flex"
+    },
+  };
+});
+
+const newsFetcher = () => fetch(NEWS_API_URL)
+  .then(response => response.json());
 
 const IndexPage: NextPage = () => {
+  const classes = useStyles();
+
+  const { data, error } = useSWR<INewsEntry[]>(NEWS_API_URL, newsFetcher);
+
+  if (error) {
+    return <div>Fehler beim Laden: ${error}</div>
+  }
+
+  if (!data) {
+    return <div>News werden geladen ...</div>;
+  }
+
   return (
-    <Container maxWidth="sm">
-      <p>
-        Gallia est omnis divisa in partes tres, quarum unam incolunt Belgae, aliam Aquitani, tertiam qui ipsorum lingua Celtae, nostra Galli appellantur.
-      </p>
+    <Container maxWidth="lg" className={classes.blogsContainer}>
+      <Typography variant="h4" className={classes.blogTitle}>
+        News
+      </Typography>
+      <Grid container spacing={3}>
+        {data.map(n => {
+          const handleClick = () => {
+            window.location.href = n.link;
+          };
 
-      <p>
-        Hi omnes lingua, institutis, legibus inter se differunt.
-      </p>
-
-      <p>
-        Gallos ab Aquitanis Garumna flumen, a Belgis Matrona et Sequana dividit.
-      </p>
+          return (
+            <Grid
+              key={String(n.id)}
+              item xs={12} sm={6} md={4}
+            >
+              <Card className={classes.card} onClick={handleClick}>
+                {n.image && <CardMedia
+                  className={classes.media}
+                  image={n.image.url}
+                  title={n.link}
+                />}
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="h2">
+                    {n.title}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                    {n.summary}
+                  </Typography>
+                </CardContent>
+                <CardActions className={classes.cardActions}>
+                  <Box className={classes.author}>
+                    {n.author?.avatar && <Avatar src={n.author.avatar} />}
+                    <Box ml={2}>
+                      <Typography variant="subtitle2" component="p">
+                        {n.author.name}
+                      </Typography>
+                      <Typography variant="subtitle2" color="textSecondary" component="p">
+                        {n.time}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box>
+                    <Link
+                      target="_blank"
+                      href={n.link}
+                    >
+                      <IconButton
+                        color="primary"
+                        component="span"
+                      >
+                        <OpenInNewIcon />
+                      </IconButton>
+                    </Link>
+                  </Box>
+                </CardActions>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
     </Container>
   );
 };
