@@ -24,7 +24,7 @@
 
 // import styles from '../styles/Home.module.scss';
 import dayJS from 'dayjs';
-import { Avatar, Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Container, Grid, IconButton, Link, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardActions, CardContent, CardMedia, Container, Grid, IconButton, Link, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import type { NextPage } from 'next';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -82,16 +82,12 @@ const IndexPage: NextPage = () => {
       </Typography>
       <Grid container spacing={3}>
         {data.map(n => {
-          const handleClick = () => {
-            window.location.href = n.link;
-          };
-
           return (
             <Grid
               key={String(n.id)}
               item xs={12} sm={6} md={4}
             >
-              <Card className={classes.card} onClick={handleClick}>
+              <Card className={classes.card}>
                 {n.image && <CardMedia
                   className={classes.media}
                   image={n.image.url}
