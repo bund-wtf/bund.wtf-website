@@ -37,7 +37,6 @@ export const handler: PluginHandler = async (context) => {
       avatar: "https://heise.cloudimg.io/v7/_www-heise-de_/imgs/18/1/7/9/4/8/9/1/heise_online_logo_icon-ab45c6dd11f6d585.gif"
     },
     link: `${context.url}`,
-    time: new Date(),
     title: ''
   };
 

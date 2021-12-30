@@ -35,7 +35,6 @@ export const handler: PluginHandler = async (context) => {
       avatar: "https://cdn.prod.www.spiegel.de/public/spon/images/icons/touch-icon180.png"
     },
     link: `${context.url}`,
-    time: new Date(),
     title: ''
   };
 

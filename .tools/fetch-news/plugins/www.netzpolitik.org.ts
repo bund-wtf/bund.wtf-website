@@ -35,7 +35,6 @@ export const handler: PluginHandler = async (context) => {
       avatar: "https://cdn.netzpolitik.org/wp-upload/2018/11/NP_logo_3z_1920_1080.png",
     },
     link: `${context.url}`,
-    time: new Date(),
     title: ''
   };
 
