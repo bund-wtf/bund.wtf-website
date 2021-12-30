@@ -22,41 +22,23 @@
   SOFTWARE.
 *******************************************************************************/
 
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { withMongo } from '../../data/mongo';
-import type { INewsEntry } from '../../types';
+import { MongoClient } from "mongodb";
+import type { MongoAction } from "../types";
 
-type ResponseData = INewsEntry[];
+export async function withMongo<T extends any = any>(
+  action: MongoAction<T>
+) {
+  const client = new MongoClient(
+    process.env.MONGO_URI!.trim()
+  );
 
-const handler: NextApiHandler = async (
-  request: NextApiRequest,
-  response: NextApiResponse<ResponseData>
-) => {
-  if (request.method === 'GET') {
-    const news: INewsEntry[] = await withMongo(async (database) => {
-      const collection = database.collection<INewsEntry>('news');
+  await client.connect();
 
-      return collection.find({})
-        .sort({
-          'time': -1,
-          '_id': -1
-        })
-        .toArray();
-    });
+  try {
+    const database = client.db(process.env.MONGO_DB!.trim());
 
-    response.status(200)
-      .json(news.map((n: any) => {
-        return {
-          ...n,
-
-          _id: undefined,
-          time: n.time.toISOString(),
-        };
-      }));
-  } else {
-    response.status(404)
-      .end();
+    return await action(database, client);
+  } finally {
+    await client.close();
   }
-};
-
-export default handler;
+}

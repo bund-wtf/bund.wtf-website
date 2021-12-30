@@ -22,15 +22,14 @@
   SOFTWARE.
 *******************************************************************************/
 
+import xmlBuilder from 'xmlbuilder';
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { withMongo } from '../../data/mongo';
 import type { INewsEntry } from '../../types';
 
-type ResponseData = INewsEntry[];
-
 const handler: NextApiHandler = async (
   request: NextApiRequest,
-  response: NextApiResponse<ResponseData>
+  response: NextApiResponse<Buffer>
 ) => {
   if (request.method === 'GET') {
     const news: INewsEntry[] = await withMongo(async (database) => {
@@ -44,15 +43,29 @@ const handler: NextApiHandler = async (
         .toArray();
     });
 
-    response.status(200)
-      .json(news.map((n: any) => {
-        return {
-          ...n,
+    const builder = xmlBuilder.create('rss', {
+      encoding: 'UTF-8'
+    });
 
-          _id: undefined,
-          time: n.time.toISOString(),
-        };
-      }));
+    const rss = builder.attribute('version', '2.0');
+
+    const rss_channel = rss.element('channel');
+    rss_channel.element('title', 'bund.wtf - Digitalisierung in Deutschland');
+    rss_channel.element('link', 'https://bund.wtf');
+    rss_channel.element('description', 'News und andere (vielleicht) lustige Dinge aus dem Digitalem Neuland');
+
+    for (const n of news) {
+      const item = rss_channel.element('item');
+
+      item.element('title', n.title);
+      item.element('link', n.link);
+      item.element('description', n.summary || '');
+      item.element('pubDate', n.time.toUTCString());
+    }
+
+    response.status(200)
+      .setHeader('Content-Type', 'application/rss+xml; charset=utf-8')
+      .send(Buffer.from(rss.end({ pretty: false }), 'utf8'));
   } else {
     response.status(404)
       .end();

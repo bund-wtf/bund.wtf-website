@@ -23,6 +23,7 @@
 *******************************************************************************/
 
 // import styles from '../styles/Home.module.scss';
+import dayJS from 'dayjs';
 import { Avatar, Box, Card, CardActionArea, CardActions, CardContent, CardMedia, Container, Grid, IconButton, Link, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import type { NextPage } from 'next';
@@ -112,7 +113,7 @@ const IndexPage: NextPage = () => {
                         {n.author.name}
                       </Typography>
                       <Typography variant="subtitle2" color="textSecondary" component="p">
-                        {n.time}
+                        {dayJS(n.time).format('DD.MM.YYYY HH:mm')}
                       </Typography>
                     </Box>
                   </Box>

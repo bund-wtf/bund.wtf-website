@@ -30,9 +30,9 @@ import createCache from '@emotion/cache';
 import { AppBar, Box, Button, CssBaseline, Toolbar, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Link from 'next/link';
+import Head from 'next/head';
 
 import heroImage from '../assets/images/computer-monkey.png';
-
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -95,61 +95,73 @@ const BundWtfApp = (props: BundWtfAppProps) => {
   };
 
   return (
-    <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+    <>
+      <Head>
+        <title>bund.wtf - Digitalisierung in Deutschland</title>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="RSS 2.0"
+          href="/api/rss"
+        />
+      </Head>
 
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ mr: 2, display: { xs: 'flex' } }}
-            >
-              <Link href="/">
-                <Button
-                  key="home-page"
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  WTF Bund!
-                </Button>
-              </Link>
-            </Typography>
+      <CacheProvider value={emotionCache}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
-              <Link href="/datenschutz">
-                <Button
-                  key="privacy-page"
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  Datenschutz
-                </Button>
-              </Link>
+          <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ mr: 2, display: { xs: 'flex' } }}
+              >
+                <Link href="/">
+                  <Button
+                    key="home-page"
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    #wtfbund
+                  </Button>
+                </Link>
+              </Typography>
 
-              <Link href="/impressum">
-                <Button
-                  key="imprint-page"
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  Impressum
-                </Button>
-              </Link>
+              <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
+                <Link href="/datenschutz">
+                  <Button
+                    key="privacy-page"
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    Datenschutz
+                  </Button>
+                </Link>
+
+                <Link href="/impressum">
+                  <Button
+                    key="imprint-page"
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    Impressum
+                  </Button>
+                </Link>
+              </Box>
+
+              <Button color="inherit" onClick={handleGithubClick}>GitHub</Button>
+            </Toolbar>
+          </AppBar>
+          <Toolbar />
+          <Box className={classes.hero}>
+            <Box className={classes.heroTitleWrapper}>
+              <Box className={classes.heroTitle}>#wtfbund</Box>
+              <Box className={classes.heroSubtitle}>Digitalisierung in Deutschland</Box>
             </Box>
-
-            <Button color="inherit" onClick={handleGithubClick}>GitHub</Button>
-          </Toolbar>
-        </AppBar>
-        <Toolbar />
-        <Box className={classes.hero}>
-          <Box className={classes.heroTitleWrapper}>
-            <Box className={classes.heroTitle}>WTF Bund!</Box>
-            <Box className={classes.heroSubtitle}>Digitalisierung in Deutschland</Box>
           </Box>
-        </Box>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </CacheProvider>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </CacheProvider>
+    </>
   );
 };
 

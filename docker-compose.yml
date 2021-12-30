@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  website:
+    image: node:14-alpine
+    command: >-
+      sh -c "npm install && npm rebuild node-sass && npm run dev"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    working_dir: /app
+
+  mongo:
+    command: --syslog
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
+    restart: always
+    volumes:
+      - /data/db

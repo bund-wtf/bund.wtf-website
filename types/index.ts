@@ -22,29 +22,22 @@
   SOFTWARE.
 *******************************************************************************/
 
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import type { Db as MongoDb, MongoClient } from 'mongodb';
 
-class BundWtfDocument extends Document {
-  static async getInitialProps(ctx: any) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return {
-      ...initialProps
-    };
+export interface INewsEntry {
+  author: {
+    avatar?: string | null;
+    name: string;
   };
-
-  render() {
-    return (
-      <Html>
-        <Head>
-          <title>WTF Bund! - Digitalisierung in Deutschland</title>
-        </Head>
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    )
-  };
+  id: string;
+  image?: {
+    url: string;
+  } | null;
+  link: string;
+  summary?: string | null;
+  time: Date;
+  title: string;
 }
 
-export default BundWtfDocument;
+export type MongoAction<T extends any = any> =
+  (database: MongoDb, client: MongoClient) => Promise<T>;
