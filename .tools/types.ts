@@ -22,42 +22,64 @@
   SOFTWARE.
 *******************************************************************************/
 
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { withMongo } from '../../data/mongo';
-import type { INewsEntry } from '../../types';
+/**
+ * An news entry.
+ */
+export interface INewsEntry {
+  /**
+   * Author information.
+   */
+  author: INewsEntryAuthor;
+  /**
+   * The property for the ID on the database.
+   */
+  id?: string;
+  /**
+   * Image information.
+   */
+  image?: INewsEntryImage | null;
+  /**
+   * The link.
+   */
+  link: string;
+  /**
+   * Short description / summary.
+   */
+  summary?: string | null;
+  /**
+   * The time(stamp).
+   */
+  time?: Date | null;
+  /**
+   * The title.
+   */
+  title: string;
+}
 
-type ResponseData = INewsEntry[];
+/**
+ * News entry author information.
+ */
+export interface INewsEntryAuthor {
+  /**
+   * Optional link to avatar.
+   */
+  avatar?: string | null;
+  /**
+   * Display name.
+   */
+  name: string;
+  /**
+   * Optional Twitter handle.
+   */
+  twitter?: string | null;
+}
 
-const handler: NextApiHandler = async (
-  request: NextApiRequest,
-  response: NextApiResponse<ResponseData>
-) => {
-  if (request.method === 'GET') {
-    const news: INewsEntry[] = await withMongo(async (database) => {
-      const collection = database.collection<INewsEntry>('news');
-
-      return collection.find({})
-        .sort({
-          'time': -1,
-          '_id': -1
-        })
-        .limit(25)
-        .toArray();
-    });
-
-    response.status(200)
-      .json(news.map((n: any) => {
-        return {
-          ...n,
-
-          _id: undefined,
-          time: n.time.toISOString(),
-        };
-      }));
-  } else {
-    response.status(404)
-      .end();
-  }
-};
-
-export default handler;
+/**
+ * News entry image information.
+ */
+export interface INewsEntryImage {
+  /**
+   * The URL to the image.
+   */
+  url: string;
+}

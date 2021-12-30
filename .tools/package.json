@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Tools for bund.wtf website.",
   "scripts": {
-    "news:post": "ts-node post-news.ts"
+    "news:fetch": "ts-node fetch-news/index.ts",
+    "news:publish": "ts-node publish-news.ts"
   },
   "engines": {
     "node": ">=14.0.0",
@@ -21,11 +22,16 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "@types/uuid": "8.3.3",
+    "@types/yargs": "17.0.8",
+    "axios": "0.24.0",
     "dayjs": "1.10.7",
     "dotenv": "10.0.0",
+    "htmlparser2": "7.2.0",
     "mongodb": "4.2.2",
+    "sanitize-filename": "1.6.3",
     "ts-node": "10.4.0",
     "twitter-api-v2": "1.8.0",
-    "uuid": "8.3.2"
+    "uuid": "8.3.2",
+    "yargs": "17.3.1"
   }
 }

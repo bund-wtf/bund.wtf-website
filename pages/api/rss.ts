@@ -40,6 +40,7 @@ const handler: NextApiHandler = async (
           'time': -1,
           '_id': -1
         })
+        .limit(25)
         .toArray();
     });
 

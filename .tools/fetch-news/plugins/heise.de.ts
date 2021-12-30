@@ -22,42 +22,4 @@
   SOFTWARE.
 *******************************************************************************/
 
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { withMongo } from '../../data/mongo';
-import type { INewsEntry } from '../../types';
-
-type ResponseData = INewsEntry[];
-
-const handler: NextApiHandler = async (
-  request: NextApiRequest,
-  response: NextApiResponse<ResponseData>
-) => {
-  if (request.method === 'GET') {
-    const news: INewsEntry[] = await withMongo(async (database) => {
-      const collection = database.collection<INewsEntry>('news');
-
-      return collection.find({})
-        .sort({
-          'time': -1,
-          '_id': -1
-        })
-        .limit(25)
-        .toArray();
-    });
-
-    response.status(200)
-      .json(news.map((n: any) => {
-        return {
-          ...n,
-
-          _id: undefined,
-          time: n.time.toISOString(),
-        };
-      }));
-  } else {
-    response.status(404)
-      .end();
-  }
-};
-
-export default handler;
+export * from './www.heise.de';
