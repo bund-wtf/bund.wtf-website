@@ -27,10 +27,12 @@ import type { AppProps } from 'next/app';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import createCache from '@emotion/cache';
-import { AppBar, Box, Button, CssBaseline, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, CssBaseline, IconButton, Link as MuiLink, Toolbar, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Link from 'next/link';
 import Head from 'next/head';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 import heroImage from '../assets/images/computer-monkey.png';
 
@@ -58,6 +60,9 @@ const useStyles = makeStyles((theme) => {
   return {
     appBar: {
       backgroundColor: '#000',
+      color: '#fff'
+    },
+    appBarButton: {
       color: '#fff'
     },
     hero: {
@@ -89,10 +94,6 @@ const BundWtfApp = (props: BundWtfAppProps) => {
   const classes = useStyles();
 
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-
-  const handleGithubClick = () => {
-    window.location.href = 'https://github.com/bund-wtf';
-  };
 
   return (
     <>
@@ -148,7 +149,29 @@ const BundWtfApp = (props: BundWtfAppProps) => {
                 </Link>
               </Box>
 
-              <Button color="inherit" onClick={handleGithubClick}>GitHub</Button>
+              <MuiLink
+                href="https://twitter.com/bund_wtf"
+                target="_blank"
+              >
+                <IconButton
+                  className={classes.appBarButton}
+                  component="span"
+                >
+                  <TwitterIcon />
+                </IconButton>
+              </MuiLink>
+
+              <MuiLink
+                href="https://github.com/bund-wtf"
+                target="_blank"
+              >
+                <IconButton
+                  className={classes.appBarButton}
+                  component="span"
+                >
+                  <GitHubIcon />
+                </IconButton>
+              </MuiLink>
             </Toolbar>
           </AppBar>
           <Toolbar />
