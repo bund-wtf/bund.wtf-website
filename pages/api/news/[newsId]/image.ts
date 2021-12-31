@@ -23,49 +23,43 @@
 *******************************************************************************/
 
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
-import { withMongo } from '../../data/mongo';
-import type { INewsEntry } from '../../types';
+import { withMongo } from '../../../../data/mongo';
+import type { INewsEntry } from '../../../../types';
 
-type ResponseData = INewsEntry[];
+type ResponseData = Buffer;
 
 const handler: NextApiHandler = async (
   request: NextApiRequest,
   response: NextApiResponse<ResponseData>
 ) => {
   if (request.method === 'GET') {
-    const news: INewsEntry[] = await withMongo(async (database) => {
-      const collection = database.collection<INewsEntry>('news');
+    const newsId = String(request.query.newsId || '').trim();
 
-      return collection.find({})
-        .sort({
-          'time': -1,
-          '_id': -1
-        })
-        .limit(25)
-        .toArray();
-    });
+    if (newsId.length) {
+      const existingEntry: INewsEntry | null | undefined = await withMongo(async (database) => {
+        const collection = database.collection<INewsEntry>('news');
 
-    response.status(200)
-      .json(news.map((n: any) => {
-        if (n.author?.avatar?.length) {
-          n.author.avatar = `/api/news/${encodeURIComponent(String(n.id))}/avatar`;
+        return collection.findOne({
+          id: newsId
+        });
+      });
+
+      if (existingEntry?.image?.url?.length) {
+        const imageResponse = await fetch(existingEntry.image.url);
+
+        if (imageResponse.status === 200) {
+          const data = Buffer.from(await imageResponse.arrayBuffer());
+
+          return response.status(200)
+            .setHeader('Content-Type', imageResponse.headers.get('content-type') || 'application/octet-stream')
+            .send(data);
         }
-
-        if (n.image?.url?.length) {
-          n.image.url = `/api/news/${encodeURIComponent(String(n.id))}/image`;
-        }
-
-        return {
-          ...n,
-
-          _id: undefined,
-          time: n.time.toISOString(),
-        };
-      }));
-  } else {
-    response.status(404)
-      .end();
+      }
+    }
   }
+
+  response.status(404)
+    .end();
 };
 
 export default handler;

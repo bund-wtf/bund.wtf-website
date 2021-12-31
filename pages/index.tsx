@@ -117,6 +117,7 @@ const IndexPage: NextPage = () => {
                     <Link
                       target="_blank"
                       href={n.link}
+                      title={`In neuem Fenster öffnen: ${n.link}`}
                     >
                       <IconButton
                         color="primary"
