@@ -83,3 +83,13 @@ export interface INewsEntryImage {
    */
   url: string;
 }
+
+/**
+ * Custom options for 'publishNews()' function.
+ */
+export interface IPublishNewsOptions {
+  /**
+   * List of optional hashtags.
+   */
+  hashtags?: string[] | null;
+}

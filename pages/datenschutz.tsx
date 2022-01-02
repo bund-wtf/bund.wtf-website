@@ -68,7 +68,7 @@ const DatenschutzPage: NextPage = () => {
       <p>Bei Cookies handelt es sich um kleine Dateien, welche auf Ihrem
         Endgerät gespeichert werden. Ihr Browser greift auf diese Dateien zu.</p>
       <p>Diese Cookies dienen dazu, erweiterte Funktionen anzubieten, die allerdings erst nach einem eindeutigen Hinweis und der Zustimmung des Benutzers aktiviert werden und jederzeit wieder deaktiviert werden können.</p>
-      <p>Die Daten dieser Cookies werden ausschließlich innerhalb dieses Servers verwendet und nicht weitergegeben, sofern nicht anders angegeben.</p>
+      <p>Die Daten dieser Cookies werden ausschließlich innerhalb dieses Servers verwendet und nicht weitergegeben, sofern nicht anders angegeben. Bspw. setzt das Banner am unteren Bildschirmrand ein Cookie, um zu bestimmen, ob Sie bereits auf &quot;Verstanden&quot; geklickt hatten oder nicht.</p>
       <p>Gängige Browser-Programme bieten die Möglichkeit, Cookies nicht zuzulassen. WICHTIG: Es ist
         nicht gewährleistet, dass Sie auf alle Funktionen dieser Website ohne Einschränkungen
         zugreifen können, wenn Sie entsprechende Einstellungen anpassen.</p>

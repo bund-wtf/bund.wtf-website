@@ -24,15 +24,16 @@
 
 import { MongoClient } from 'mongodb';
 import { v4 } from 'uuid';
-import type { INewsEntry } from "./types";
+import type { INewsEntry, IPublishNewsOptions } from "./types";
 import TwitterAPI from 'twitter-api-v2';
 
 /**
  * Publishes a news entry.
  *
  * @param {INewsEntry} newsEntry The entry to publish.
+ * @param {IPublishNewsOptions} [options] Custom options.
  */
-export async function publishNews(newsEntry: INewsEntry) {
+export async function publishNews(newsEntry: INewsEntry, options: IPublishNewsOptions = {}) {
   delete (newsEntry as any)._id;
 
   if (!newsEntry.id?.length) {
@@ -55,6 +56,7 @@ export async function publishNews(newsEntry: INewsEntry) {
 
     if (newsEntry.author?.twitter?.length) {  // publish on twitter?
       const suffixes = ['#wtfbund', '#neuland'];  // default hashtags
+      suffixes.push(...(options.hashtags || []));  // more hashtags
 
       // normalize twitter handle
       let twitterHandle = newsEntry.author.twitter.trim();

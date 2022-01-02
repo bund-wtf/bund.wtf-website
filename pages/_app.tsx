@@ -23,6 +23,8 @@
 *******************************************************************************/
 
 import '../styles/globals.scss';
+
+import CookieConsent from "react-cookie-consent";
 import type { AppProps } from 'next/app';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -182,6 +184,16 @@ const BundWtfApp = (props: BundWtfAppProps) => {
             </Box>
           </Box>
           <Component {...pageProps} />
+
+          <CookieConsent style={{
+            background: "blue",
+            color: "white"
+          }} buttonText={"Verstanden!"}>
+            Diese Seite möglicherweise Cookies ein.{" "}
+            <Link href="/datenschutz">
+              <span style={{ color: 'yellow', cursor: 'pointer' }}>Hier geht es zur Datenschutzerklärung ...</span>
+            </Link>
+          </CookieConsent>
         </ThemeProvider>
       </CacheProvider>
     </>

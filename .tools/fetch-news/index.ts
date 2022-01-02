@@ -66,46 +66,80 @@ const scriptEx = path.extname(__filename);
 const pluginDir = path.join(__dirname, 'plugins');
 const argv = yargs(hideBin(process.argv)).parseSync();
 
+const newsTxtFile = path.join(__dirname, '../news.txt');
+
 async function main() {
-  let urlArg = String(argv['_'][0] || '').trim();
-  if (!urlArg.length) {
-    throw new Error('No URL specified!');
+  const urlsToFetch: string[] = [];
+
+  const argList = argv['_'].map(a => String(a).trim())
+    .filter(a => a !== '');
+
+  const urlArgList = argList.filter(a => !a.startsWith('#'));
+  const hashtagArgList = argList.filter(a => a.startsWith('#'));
+
+  for (let i = 0; i < urlArgList.length; i++) {
+    // single URL from argument
+    let ua = urlArgList[i];
+
+    if (!ua.startsWith('http://') && !ua.startsWith('https://')) {
+      ua = 'https://' + ua;  // add default scheme
+    }
+
+    if (ua.startsWith('http://')) {
+      throw new Error('Unsecure URL schemes are not allowed!');
+    }
+
+    urlsToFetch.push(ua);
   }
 
-  if (!urlArg.startsWith('http://') && !urlArg.startsWith('https://')) {
-    urlArg = 'https://' + urlArg;  // add default scheme
+  if (!urlsToFetch.length) {
+    // from ../news.txt file
+
+    const lines = (await fs.promises.readFile(newsTxtFile, 'utf8'))
+      .split('\n')
+      .map(l => l.trim())
+      .filter(l => l !== '');
+
+    urlsToFetch.push(...lines);
   }
 
-  if (urlArg.startsWith('http://')) {
-    throw new Error('Unsecure URL schemes are not allowed!');
+  for (const u of urlsToFetch) {
+    try {
+      const url = new URL(u);
+
+      // file of plugin script
+      const pluginFilename = path.join(
+        pluginDir,
+        sanitizeFilename(`${url.host}`.toLowerCase().trim() + scriptEx)
+      );
+
+      if (!fs.existsSync(pluginFilename) || !fs.statSync(pluginFilename).isFile()) {
+        throw new Error(`No plugin found for domain ${url.host}!`);
+      }
+
+      const pluginHandler: PluginHandler = require(pluginFilename).handler;
+      if (typeof pluginHandler !== 'function') {
+        throw new TypeError('Plugin handler is no function!');
+      }
+
+      console.log('Fetching URL', u);
+
+      // prepare context for handler
+      const context: IPluginHandlerContext = {
+        url
+      };
+
+      // execute
+      const newsEntry = await pluginHandler(context);
+      // publish
+      if (false as any)
+        await publishNews(newsEntry);
+
+      console.log('#hashtagArgList', hashtagArgList);
+    } catch (ex) {
+      console.error('Could not fetch URL', u + ':', ex);
+    }
   }
-
-  const url = new URL(urlArg);
-
-  // file of plugin script
-  const pluginFilename = path.join(
-    pluginDir,
-    sanitizeFilename(`${url.host}`.toLowerCase().trim() + scriptEx)
-  );
-
-  if (!fs.existsSync(pluginFilename) || !fs.statSync(pluginFilename).isFile()) {
-    throw new Error(`No plugin found for domain ${url.host}!`);
-  }
-
-  const pluginHandler: PluginHandler = require(pluginFilename).handler;
-  if (typeof pluginHandler !== 'function') {
-    throw new TypeError('Plugin handler is no function!');
-  }
-
-  // prepare context for handler
-  const context: IPluginHandlerContext = {
-    url
-  };
-
-  // execute
-  const newsEntry = await pluginHandler(context);
-  // publish
-  await publishNews(newsEntry);
 }
 
 main().catch(console.error);
