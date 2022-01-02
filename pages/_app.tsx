@@ -189,7 +189,7 @@ const BundWtfApp = (props: BundWtfAppProps) => {
             background: "blue",
             color: "white"
           }} buttonText={"Verstanden!"}>
-            Diese Seite möglicherweise Cookies ein.{" "}
+            Diese Seite setzt Cookies ein.{" "}
             <Link href="/datenschutz">
               <span style={{ color: 'yellow', cursor: 'pointer' }}>Hier geht es zur Datenschutzerklärung ...</span>
             </Link>
