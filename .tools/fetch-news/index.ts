@@ -132,10 +132,9 @@ async function main() {
       // execute
       const newsEntry = await pluginHandler(context);
       // publish
-      if (false as any)
-        await publishNews(newsEntry);
-
-      console.log('#hashtagArgList', hashtagArgList);
+      await publishNews(newsEntry, {
+        hashtags: hashtagArgList
+      });
     } catch (ex) {
       console.error('Could not fetch URL', u + ':', ex);
     }
