@@ -111,7 +111,7 @@ const BundWtfApp = (props: BundWtfAppProps) => {
           href="/api/rss"
         />
 
-        <meta name="twitter:title" content="#wtfbund" />
+        <meta name="twitter:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:image:src" content={heroImage.src} />
         <meta name="twitter:description" content={siteDescription} />
