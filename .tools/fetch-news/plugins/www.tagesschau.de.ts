@@ -74,7 +74,7 @@ export const handler: PluginHandler = async (context) => {
         switch (attributes['property']?.toLowerCase().trim()) {
           case 'og:image':
             newEntry.image = {
-              url: String(attributes['content']).trim()
+              url: 'https://www.tagesschau.de/' + String(attributes['content']).trim()
             };
             break;
 
