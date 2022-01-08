@@ -32,7 +32,7 @@ export const handler: PluginHandler = async (context) => {
   const newEntry: INewsEntry = {
     author: {
       name: "tagesschau.de",
-      avatar: "http://www.tagesschau.de/multimedia/bilder/tagesschauapp104~_v-grossfrei16x9.jpg",
+      avatar: "https://www.tagesschau.de/multimedia/bilder/tagesschauapp104~_v-grossfrei16x9.jpg",
     },
     link: `${context.url}`,
     title: ''

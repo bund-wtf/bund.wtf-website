@@ -35,8 +35,6 @@ const handler: NextApiHandler = async (
   if (request.method === 'GET') {
     const newsId = String(request.query.newsId || '').trim();
 
-    console.log('news', newsId);
-
     if (newsId.length) {
       const existingEntry: INewsEntry | null | undefined = await withMongo(async (database) => {
         const collection = database.collection<INewsEntry>('news');

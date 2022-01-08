@@ -122,8 +122,6 @@ async function main() {
         throw new TypeError('Plugin handler is no function!');
       }
 
-      console.log('Fetching URL', u);
-
       // prepare context for handler
       const context: IPluginHandlerContext = {
         url
