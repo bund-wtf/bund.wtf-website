@@ -74,7 +74,7 @@ export const handler: PluginHandler = async (context) => {
         switch (attributes['property']?.toLowerCase().trim()) {
           case 'og:image':
             newEntry.image = {
-              url: 'https://www.tagesschau.de' + String(attributes['content']).trim()
+              url: String(attributes['content']).trim()
             };
             break;
 
@@ -87,7 +87,7 @@ export const handler: PluginHandler = async (context) => {
 
         switch (attributes['rel']?.toLowerCase().trim()) {
           case 'apple-touch-icon':
-            newEntry.author.avatar = String(attributes['href']).trim();
+            newEntry.author.avatar = 'https://www.tagesschau.de' + String(attributes['href']).trim();
             break;
         }
       }
