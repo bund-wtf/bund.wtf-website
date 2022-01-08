@@ -92,6 +92,9 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
+const siteTitle = '#wtfbund';
+const siteDescription = 'Digitalisierung in Deutschland';
+
 const BundWtfApp = (props: BundWtfAppProps) => {
   const classes = useStyles();
 
@@ -107,6 +110,21 @@ const BundWtfApp = (props: BundWtfAppProps) => {
           title="RSS 2.0"
           href="/api/rss"
         />
+
+        <meta name="twitter:title" content="#wtfbund" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image:src" content={heroImage.src} />
+        <meta name="twitter:description" content={siteDescription} />
+        <meta name="twitter:creator" content="@bund_wtf" />
+        <meta name="twitter:site" content="@bund_wtf" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={siteTitle} />
+        <meta property="og:locale" content="de_DE" />
+        <meta property="og:site_name" content={siteTitle} />
+        <meta property="og:image" content={heroImage.src} />
+        <meta property="og:url" content="https://bund.wtf" />
+        <meta property="og:description" content={siteDescription} />
       </Head>
 
       <CacheProvider value={emotionCache}>
