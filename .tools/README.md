@@ -34,9 +34,29 @@ npm run news:fetch https://netzpolitik.org/2021/anlasslose-massenueberwachung-bu
 
 Supported sites are: 
 
-* [Heise Medien](https://www.heise.de/)
+* [Heise Medien](https://heise.de/)
 * [netzpolitik.org](https://netzpolitik.org/)
 * [SPIEGEL Online](https://spiegel.de/)
+* [Tagesschau](https://tagesschau.de/)
+* [ZDF](https://zdf.de/)
+
+### Fetch news
+
+To fetch news from a list of URLs, simply create a simple [news.txt file](./news.txt):
+
+```
+https://netzpolitik.org/2022/booster-nachweis-covpasscheck-app-nutzlos-bei-einigen-corona-regeln/
+https://www.zdf.de/nachrichten/wirtschaft/elektronische-krankschreibung-100.html
+https://www.spiegel.de/netzwelt/apps/luca-app-ermittler-griffen-unrechtmaessig-auf-daten-zu-a-d4148cf4-c63f-4ad2-b39d-5f20adc00591
+https://www.heise.de/news/c-t-deckt-auf-Sicherheitsluecke-in-elektronischer-Patientenakte-6304671.html
+
+```
+
+Then execute
+
+```bash
+npm run news:fetch
+```
 
 ### Post news
 

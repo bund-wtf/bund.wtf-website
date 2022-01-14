@@ -203,6 +203,8 @@ const BundWtfApp = (props: BundWtfAppProps) => {
           </Box>
           <Component {...pageProps} />
 
+          <Box style={{ display: 'block', height: '128px', width: '100%' }} />
+
           <CookieConsent style={{
             background: "blue",
             color: "white"
