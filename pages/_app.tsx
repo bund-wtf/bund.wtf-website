@@ -35,6 +35,7 @@ import Link from 'next/link';
 import Head from 'next/head';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import RssFeedIcon from '@mui/icons-material/RssFeed';
 
 import heroImage from '../assets/images/computer-monkey.png';
 
@@ -178,6 +179,18 @@ const BundWtfApp = (props: BundWtfAppProps) => {
                   component="span"
                 >
                   <TwitterIcon />
+                </IconButton>
+              </MuiLink>
+
+              <MuiLink
+                href="/api/rss"
+                target="_blank"
+              >
+                <IconButton
+                  className={classes.appBarButton}
+                  component="span"
+                >
+                  <RssFeedIcon />
                 </IconButton>
               </MuiLink>
 
